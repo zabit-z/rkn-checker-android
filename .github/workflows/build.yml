@@ -22,12 +22,9 @@ jobs:
           cache: gradle
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v4
+        uses: amyu/setup-android@dd20604d00311747ada5db85ecdf4d7577fab4f9
         with:
-          java-version: "17"
-          api-level: 36
-          target-sdk-level: 36
-          build-tools: 36.0.0
+          sdk-version: 36
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
