@@ -74,9 +74,16 @@ fun ConsoleCheckerScreen() {
         listOf(
             "yandex.ru",
             "mail.ru",
+            "online.sberbank.ru",
+            "web.max.ru",
+            "vk.com",
+            "rutube.ru",
             "github.com",
             "google.com",
-            "facebook.com"
+            "facebook.com",
+            "telegram.org",
+            "instagram.com",
+            "linkedin.com"
         )
     }
 
