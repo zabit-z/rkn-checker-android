@@ -17,7 +17,7 @@ A simple, terminal-styled Android application that checks the availability of se
 
 ### Prerequisites
 1. **Java SDK**: Version 17 (recommended version for the included Gradle configurations).
-2. **Android SDK**: API 34 platforms (automatically downloaded by the wrapper if missing).
+2. **Android SDK**: API 36 platforms (automatically downloaded by the wrapper if missing).
 3. **ADB**: Command-line tool to deploy files to your device.
 
 ### 1. Build the APK
