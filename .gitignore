@@ -19,7 +19,7 @@ out/
 
 # Local configuration files (contains local SDK path, etc.)
 local.properties
-
+graphify-out
 # Log files
 *.log
 
