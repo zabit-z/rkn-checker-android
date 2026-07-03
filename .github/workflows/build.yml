@@ -22,19 +22,15 @@ jobs:
           cache: gradle
 
       - name: Setup Android SDK
-        uses: amyu/setup-android@dd20604d00311747ada5db85ecdf4d7577fab4f9
+        uses: android-actions/setup-android@v4
         with:
-          sdk-version: 36
-          build-tools-version: 36.0.0
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+          cmdline-tools-version: 14742923
 
       - name: Build with Gradle
-        run: ./gradlew --no-daemon build
+        run: bash gradlew --no-daemon build
 
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: app-debug
           path: app/build/outputs/apk/debug/*.apk

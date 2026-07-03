@@ -76,14 +76,17 @@ fun ConsoleCheckerScreen() {
             "mail.ru",
             "online.sberbank.ru",
             "web.max.ru",
+            "id.tbank.ru",
             "vk.com",
+            "ozon.ru",
+            "wb.ru",
             "rutube.ru",
             "github.com",
             "google.com",
             "facebook.com",
             "telegram.org",
             "instagram.com",
-            "linkedin.com"
+            "discord.com"
         )
     }
 
