@@ -28,6 +28,7 @@ import java.net.HttpURLConnection
 import java.net.InetAddress
 import java.net.URL
 import kotlin.system.measureTimeMillis
+import org.json.JSONObject
 
 enum class LogType {
     HEADER,
@@ -38,6 +39,102 @@ enum class LogType {
 }
 
 data class LogLine(val text: String, val type: LogType)
+
+data class IpInfo(val ip: String, val provider: String)
+
+private suspend fun fetchIpAndProvider(): Result<IpInfo> = withContext(Dispatchers.IO) {
+    val errors = mutableListOf<String>()
+
+    // Try ipwho.is first
+    try {
+        val url = URL("https://ipwho.is/")
+        val conn = url.openConnection() as HttpURLConnection
+        conn.connectTimeout = 3000
+        conn.readTimeout = 3000
+        conn.requestMethod = "GET"
+        conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
+        if (conn.responseCode == 200) {
+            val response = conn.inputStream.bufferedReader().use { it.readText() }
+            val json = JSONObject(response)
+            if (json.optBoolean("success", false)) {
+                val ip = json.optString("ip", "Unknown")
+                val connection = json.optJSONObject("connection")
+                val provider = connection?.optString("isp") ?: connection?.optString("org") ?: "Unknown"
+                return@withContext Result.success(IpInfo(ip, provider))
+            } else {
+                errors.add("ipwho.is: success=false")
+            }
+        } else {
+            errors.add("ipwho.is: HTTP ${conn.responseCode}")
+        }
+    } catch (e: Exception) {
+        errors.add("ipwho.is: ${e.javaClass.simpleName}${e.message?.let { ": $it" } ?: ""}")
+    }
+
+    // Try ipapi.co second
+    try {
+        val url = URL("https://ipapi.co/json/")
+        val conn = url.openConnection() as HttpURLConnection
+        conn.connectTimeout = 3000
+        conn.readTimeout = 3000
+        conn.requestMethod = "GET"
+        conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
+        if (conn.responseCode == 200) {
+            val response = conn.inputStream.bufferedReader().use { it.readText() }
+            val json = JSONObject(response)
+            val ip = json.optString("ip", "Unknown")
+            val provider = json.optString("org", "Unknown")
+            return@withContext Result.success(IpInfo(ip, provider))
+        } else {
+            errors.add("ipapi.co: HTTP ${conn.responseCode}")
+        }
+    } catch (e: Exception) {
+        errors.add("ipapi.co: ${e.javaClass.simpleName}${e.message?.let { ": $it" } ?: ""}")
+    }
+
+    // Try ipinfo.io third
+    try {
+        val url = URL("https://ipinfo.io/json")
+        val conn = url.openConnection() as HttpURLConnection
+        conn.connectTimeout = 3000
+        conn.readTimeout = 3000
+        conn.requestMethod = "GET"
+        conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
+        if (conn.responseCode == 200) {
+            val response = conn.inputStream.bufferedReader().use { it.readText() }
+            val json = JSONObject(response)
+            val ip = json.optString("ip", "Unknown")
+            val provider = json.optString("org", "Unknown")
+            return@withContext Result.success(IpInfo(ip, provider))
+        } else {
+            errors.add("ipinfo.io: HTTP ${conn.responseCode}")
+        }
+    } catch (e: Exception) {
+        errors.add("ipinfo.io: ${e.javaClass.simpleName}${e.message?.let { ": $it" } ?: ""}")
+    }
+
+    // Try api.ipify.org fourth (IP only)
+    try {
+        val url = URL("https://api.ipify.org?format=json")
+        val conn = url.openConnection() as HttpURLConnection
+        conn.connectTimeout = 3000
+        conn.readTimeout = 3000
+        conn.requestMethod = "GET"
+        conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
+        if (conn.responseCode == 200) {
+            val response = conn.inputStream.bufferedReader().use { it.readText() }
+            val json = JSONObject(response)
+            val ip = json.optString("ip", "Unknown")
+            return@withContext Result.success(IpInfo(ip, "Unknown Provider"))
+        } else {
+            errors.add("ipify.org: HTTP ${conn.responseCode}")
+        }
+    } catch (e: Exception) {
+        errors.add("ipify.org: ${e.javaClass.simpleName}${e.message?.let { ": $it" } ?: ""}")
+    }
+
+    return@withContext Result.failure(Exception(errors.joinToString(" | ")))
+}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -103,6 +200,16 @@ fun ConsoleCheckerScreen() {
         coroutineScope.launch {
             logLines.add(LogLine("=== Starting RKN Availability Checker ===", LogType.HEADER))
             logLines.add(LogLine("Target domains to test: ${domains.size}", LogType.INFO))
+            logLines.add(LogLine("Detecting connection info...", LogType.INFO))
+            val ipInfoResult = fetchIpAndProvider()
+            val ipInfo = ipInfoResult.getOrNull()
+            if (ipInfo != null) {
+                logLines.add(LogLine("IP:                     ${ipInfo.ip}", LogType.NORMAL))
+                logLines.add(LogLine("Provider:               ${ipInfo.provider}", LogType.NORMAL))
+            } else {
+                val errorMsg = ipInfoResult.exceptionOrNull()?.message ?: "Unknown error"
+                logLines.add(LogLine("IP / Provider:          Detection failed ($errorMsg)", LogType.ERROR))
+            }
             logLines.add(LogLine("", LogType.NORMAL))
             
             var dnsOk = 0
@@ -181,6 +288,13 @@ fun ConsoleCheckerScreen() {
 
             // Summary
             logLines.add(LogLine("===== SUMMARY =====", LogType.HEADER))
+            if (ipInfo != null) {
+                logLines.add(LogLine("IP:            ${ipInfo.ip}", LogType.NORMAL))
+                logLines.add(LogLine("Provider:      ${ipInfo.provider}", LogType.NORMAL))
+            } else {
+                val errorMsg = ipInfoResult.exceptionOrNull()?.message ?: "Unknown error"
+                logLines.add(LogLine("IP/Provider:   Detection failed ($errorMsg)", LogType.ERROR))
+            }
             logLines.add(LogLine("Checked:       $total domains", LogType.NORMAL))
             
             val dnsType = if (dnsOk == total) LogType.SUCCESS else if (dnsOk > 0) LogType.INFO else LogType.ERROR
@@ -217,6 +331,7 @@ fun ConsoleCheckerScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .systemBarsPadding()
             .padding(16.dp)
     ) {
         // Console Screen Output
