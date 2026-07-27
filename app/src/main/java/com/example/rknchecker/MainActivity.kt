@@ -3,18 +3,26 @@ package com.example.rknchecker
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -35,17 +43,6 @@ import javax.net.ssl.HttpsURLConnection
 import javax.net.ssl.SNIHostName
 import javax.net.ssl.SSLSocket
 
-enum class LogType {
-    HEADER,
-    INFO,
-    SUCCESS,
-    WARNING,
-    ERROR,
-    NORMAL
-}
-
-data class LogLine(val text: String, val type: LogType)
-
 data class IpInfo(
     val ip: String,
     val isp: String,
@@ -58,15 +55,16 @@ data class TargetItem(
     val isWhitelist: Boolean
 )
 
-enum class Verdict(val label: String, val logType: LogType) {
-    OK("✓ OK", LogType.SUCCESS),
-    HTTP_STUB("✗ HTTP STUB", LogType.ERROR),
-    TLS_BLOCK("~ LIKELY TLS DPI", LogType.WARNING),
-    TCP_RESET("~ TCP RESET", LogType.WARNING),
-    DNS_BLOCK("⛔ DNS BLOCK", LogType.ERROR),
-    TIMEOUT("? TIMEOUT?", LogType.ERROR),
-    DOWN("· DOWN", LogType.INFO),
-    UNKNOWN("? UNKNOWN", LogType.INFO)
+enum class Verdict(val label: String, val badgeBg: Color, val badgeFg: Color) {
+    OK("✓ OK", Color(0xFF133827), Color(0xFF00FF66)),
+    HTTP_STUB("✗ HTTP STUB", Color(0xFF38131A), Color(0xFFFF3366)),
+    TLS_BLOCK("~ TLS DPI", Color(0xFF3D3216), Color(0xFFFFCC00)),
+    TCP_RESET("~ TCP RESET", Color(0xFF3D3216), Color(0xFFFFCC00)),
+    DNS_BLOCK("⛔ DNS BLOCK", Color(0xFF38131A), Color(0xFFFF3366)),
+    TIMEOUT("? TIMEOUT", Color(0xFF38131A), Color(0xFFFF3366)),
+    DOWN("· DOWN", Color(0xFF2C2C2C), Color(0xFF8E8E93)),
+    TESTING("... TESTING", Color(0xFF1A2B3C), Color(0xFF00E5FF)),
+    UNKNOWN("? UNKNOWN", Color(0xFF2C2C2C), Color(0xFF8E8E93))
 }
 
 data class CheckResult(
@@ -103,7 +101,6 @@ private val STUB_MARKERS = listOf(
 private suspend fun fetchIpAndProvider(): Result<IpInfo> = withContext(Dispatchers.IO) {
     val errors = mutableListOf<String>()
 
-    // Try ipinfo.io first
     try {
         val url = URL("https://ipinfo.io/json")
         val conn = url.openConnection() as HttpURLConnection
@@ -128,7 +125,6 @@ private suspend fun fetchIpAndProvider(): Result<IpInfo> = withContext(Dispatche
         errors.add("ipinfo.io: ${e.javaClass.simpleName}${e.message?.let { ": $it" } ?: ""}")
     }
 
-    // Try ipwho.is second
     try {
         val url = URL("https://ipwho.is/")
         val conn = url.openConnection() as HttpURLConnection
@@ -158,31 +154,6 @@ private suspend fun fetchIpAndProvider(): Result<IpInfo> = withContext(Dispatche
         errors.add("ipwho.is: ${e.javaClass.simpleName}${e.message?.let { ": $it" } ?: ""}")
     }
 
-    // Try ipapi.co third
-    try {
-        val url = URL("https://ipapi.co/json/")
-        val conn = url.openConnection() as HttpURLConnection
-        conn.connectTimeout = 3000
-        conn.readTimeout = 3000
-        conn.requestMethod = "GET"
-        conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
-        if (conn.responseCode in 200..399) {
-            val response = conn.inputStream.bufferedReader().use { it.readText() }
-            val json = JSONObject(response)
-            val ip = json.optString("ip", "Unknown")
-            val isp = json.optString("org", "Unknown")
-            val city = json.optString("city", "")
-            val region = json.optString("region", "")
-            val country = json.optString("country_name", "")
-            val location = listOf(city, region, country).filter { it.isNotEmpty() }.joinToString(", ")
-            return@withContext Result.success(IpInfo(ip, isp, if (location.isEmpty()) "Unknown" else location))
-        } else {
-            errors.add("ipapi.co: HTTP ${conn.responseCode}")
-        }
-    } catch (e: Exception) {
-        errors.add("ipapi.co: ${e.javaClass.simpleName}${e.message?.let { ": $it" } ?: ""}")
-    }
-
     return@withContext Result.failure(Exception(errors.joinToString(" | ")))
 }
 
@@ -210,7 +181,7 @@ private suspend fun resolveDoh(host: String): String? = withContext(Dispatchers.
             if (answers != null) {
                 for (i in 0 until answers.length()) {
                     val obj = answers.getJSONObject(i)
-                    if (obj.optInt("type") == 1) { // A record
+                    if (obj.optInt("type") == 1) {
                         return@withContext obj.optString("data")
                     }
                 }
@@ -218,7 +189,7 @@ private suspend fun resolveDoh(host: String): String? = withContext(Dispatchers.
         }
         conn.disconnect()
     } catch (e: Exception) {
-        // DoH failed
+        // Ignore
     }
     null
 }
@@ -319,19 +290,19 @@ private suspend fun checkTarget(target: TargetItem): CheckResult {
 
     if (res.sysIp == null && res.dohIp != null) {
         res.verdict = Verdict.DNS_BLOCK
-        res.notes.add("system DNS doesn't resolve, DoH does — consistent with DNS poisoning")
+        res.notes.add("System DNS failed, DoH resolved — DNS poisoning signature")
         return res
     }
 
     if (res.sysIp == null && res.dohIp == null) {
         res.verdict = Verdict.DOWN
-        res.notes.add("domain doesn't resolve via system DNS or DoH")
+        res.notes.add("Domain does not resolve via System DNS or DoH")
         return res
     }
 
     if (res.sysIp != null && res.dohIp != null && res.sysIp != res.dohIp) {
         res.dnsMismatch = true
-        res.notes.add("DNS mismatch: sys=${res.sysIp} vs doh=${res.dohIp} (may indicate transparent DNS rewriting)")
+        res.notes.add("DNS Mismatch: System=${res.sysIp} vs DoH=${res.dohIp} (Transparent DNS rewriting)")
     }
 
     // 2. TCP
@@ -344,13 +315,13 @@ private suspend fun checkTarget(target: TargetItem): CheckResult {
         val errLower = (res.tcpError ?: "").lowercase()
         if ("timeout" in errLower) {
             res.verdict = Verdict.TIMEOUT
-            res.notes.add("TCP timeout on port 443 — could be IP block, route loss, or upstream congestion")
+            res.notes.add("TCP Timeout on port 443 — IP block or route drop")
         } else if ("reset" in errLower || "rst" in errLower) {
             res.verdict = Verdict.TCP_RESET
-            res.notes.add("TCP RST received — pattern matches RST injection by a middlebox, but a busy server can also send RST")
+            res.notes.add("TCP RST received — Middlebox injection signature")
         } else {
             res.verdict = Verdict.DOWN
-            res.notes.add("TCP failed: ${res.tcpError}")
+            res.notes.add("TCP connection failed: ${res.tcpError}")
         }
         return res
     }
@@ -365,13 +336,13 @@ private suspend fun checkTarget(target: TargetItem): CheckResult {
         val errLower = (res.tlsError ?: "").lowercase()
         if ("reset" in errLower || "rst" in errLower || "connection reset" in errLower) {
             res.verdict = Verdict.TLS_BLOCK
-            res.notes.add("TLS reset right after ClientHello — consistent with SNI-based DPI filtering (typical TSPU/RKN signature), not proof")
+            res.notes.add("TLS reset right after ClientHello — SNI-based DPI filtering signature")
         } else if ("timeout" in errLower) {
             res.verdict = Verdict.TLS_BLOCK
-            res.notes.add("TLS handshake silently dropped — consistent with DPI filtering by ClientHello, but could be a flaky path")
+            res.notes.add("TLS handshake silently dropped — DPI ClientHello filtering signature")
         } else {
             res.verdict = Verdict.TLS_BLOCK
-            res.notes.add("TLS error: ${res.tlsError}")
+            res.notes.add("TLS Handshake error: ${res.tlsError}")
         }
         return res
     }
@@ -393,13 +364,13 @@ private suspend fun checkTarget(target: TargetItem): CheckResult {
 
     if (res.statusCode == 451) {
         res.verdict = Verdict.HTTP_STUB
-        res.notes.add("HTTP 451 — Unavailable For Legal Reasons (explicit)")
+        res.notes.add("HTTP 451 — Unavailable For Legal Reasons (Explicit RKN notice)")
         return res
     }
 
     if (httpRes.isStub) {
         res.verdict = Verdict.HTTP_STUB
-        res.notes.add("response body matches a known ISP stub-page marker")
+        res.notes.add("Response body matches ISP block stub-page marker")
         return res
     }
 
@@ -416,7 +387,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color(0xFF0C0C0C)
                 ) {
-                    ConsoleCheckerScreen()
+                    MainAppScreen()
                 }
             }
         }
@@ -428,8 +399,8 @@ fun RknCheckerTheme(content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = darkColorScheme(
             background = Color(0xFF0C0C0C),
-            surface = Color(0xFF1E1E1E),
-            primary = Color(0xFF00FF66),
+            surface = Color(0xFF181818),
+            primary = Color(0xFF00E5FF),
             onPrimary = Color.Black
         ),
         content = content
@@ -437,7 +408,7 @@ fun RknCheckerTheme(content: @Composable () -> Unit) {
 }
 
 @Composable
-fun ConsoleCheckerScreen() {
+fun MainAppScreen() {
     val whitelistTargets = remember {
         listOf(
             TargetItem("gosuslugi", "https://www.gosuslugi.ru/", true),
@@ -484,218 +455,495 @@ fun ConsoleCheckerScreen() {
         )
     }
 
-    val logLines = remember { mutableStateListOf<LogLine>() }
+    val resultsMap = remember { mutableStateMapOf<String, CheckResult>() }
+    var ipInfo by remember { mutableStateOf<IpInfo?>(null) }
     var isRunning by remember { mutableStateOf(false) }
-    val listState = rememberLazyListState()
+    var selectedTab by remember { mutableStateOf(0) } // 0: All, 1: Whitelist, 2: Blacklist, 3: Blocked
+
     val coroutineScope = rememberCoroutineScope()
+    val listState = rememberLazyListState()
 
     fun runTests() {
         if (isRunning) return
         isRunning = true
-        logLines.clear()
+        resultsMap.clear()
+
+        // Pre-fill placeholder results
+        (whitelistTargets + blacklistTargets).forEach { target ->
+            resultsMap[target.name] = CheckResult(target = target, verdict = Verdict.TESTING)
+        }
 
         coroutineScope.launch {
-            logLines.add(LogLine("======================================================================", LogType.HEADER))
-            logLines.add(LogLine("  RKN Block Checker", LogType.HEADER))
-            logLines.add(LogLine("======================================================================", LogType.HEADER))
-            logLines.add(LogLine("Detecting connection info...", LogType.INFO))
+            val ipResult = fetchIpAndProvider()
+            ipInfo = ipResult.getOrNull()
 
-            val ipInfoResult = fetchIpAndProvider()
-            val ipInfo = ipInfoResult.getOrNull()
-            if (ipInfo != null) {
-                logLines.add(LogLine("  IP:       ${ipInfo.ip}", LogType.NORMAL))
-                logLines.add(LogLine("  ISP:      ${ipInfo.isp}", LogType.NORMAL))
-                logLines.add(LogLine("  Location: ${ipInfo.location}", LogType.NORMAL))
-            } else {
-                val errorMsg = ipInfoResult.exceptionOrNull()?.message ?: "Unknown error"
-                logLines.add(LogLine("  IP / ISP: Detection failed ($errorMsg)", LogType.ERROR))
+            val allTargets = whitelistTargets + blacklistTargets
+            allTargets.forEach { target ->
+                val result = checkTarget(target)
+                resultsMap[target.name] = result
+                delay(30)
             }
-            logLines.add(LogLine("----------------------------------------------------------------------", LogType.HEADER))
-            logLines.add(LogLine("", LogType.NORMAL))
-
-            // Whitelist Section
-            logLines.add(LogLine("Whitelist (should always work)", LogType.HEADER))
-            logLines.add(LogLine("  name          verdict                    TCP     TLS     PLT  status", LogType.INFO))
-            logLines.add(LogLine("  --------------------------------------------------------------------", LogType.INFO))
-
-            val whiteResults = mutableListOf<CheckResult>()
-            for (target in whitelistTargets) {
-                val res = checkTarget(target)
-                whiteResults.add(res)
-
-                val nameStr = res.target.name.padEnd(13)
-                val verdictStr = res.verdict.label.padEnd(15)
-                val tcpStr = res.tcpTimeMs?.let { "${it}ms" } ?: "-"
-                val tlsStr = res.tlsTimeMs?.let { "${it}ms" } ?: "-"
-                val pltStr = res.pltMs?.let { "${it}ms" } ?: "-"
-                val statusStr = res.statusCode?.toString() ?: "-"
-
-                val lineText = String.format("  %-13s %-15s %7s %7s %7s  %-5s", nameStr.trim(), verdictStr.trim(), tcpStr, tlsStr, pltStr, statusStr)
-                logLines.add(LogLine(lineText, res.verdict.logType))
-
-                res.notes.forEach { note ->
-                    logLines.add(LogLine("    └ $note", LogType.INFO))
-                }
-                delay(40)
-            }
-
-            logLines.add(LogLine("", LogType.NORMAL))
-
-            // Blacklist Section
-            logLines.add(LogLine("Blacklist (RKN-restricted)", LogType.HEADER))
-            logLines.add(LogLine("  name          verdict                    TCP     TLS     PLT  status", LogType.INFO))
-            logLines.add(LogLine("  --------------------------------------------------------------------", LogType.INFO))
-
-            val blackResults = mutableListOf<CheckResult>()
-            for (target in blacklistTargets) {
-                val res = checkTarget(target)
-                blackResults.add(res)
-
-                val nameStr = res.target.name.padEnd(13)
-                val verdictStr = res.verdict.label.padEnd(15)
-                val tcpStr = res.tcpTimeMs?.let { "${it}ms" } ?: "-"
-                val tlsStr = res.tlsTimeMs?.let { "${it}ms" } ?: "-"
-                val pltStr = res.pltMs?.let { "${it}ms" } ?: "-"
-                val statusStr = res.statusCode?.toString() ?: "-"
-
-                val lineText = String.format("  %-13s %-15s %7s %7s %7s  %-5s", nameStr.trim(), verdictStr.trim(), tcpStr, tlsStr, pltStr, statusStr)
-                logLines.add(LogLine(lineText, res.verdict.logType))
-
-                res.notes.forEach { note ->
-                    logLines.add(LogLine("    └ $note", LogType.INFO))
-                }
-                delay(40)
-            }
-
-            logLines.add(LogLine("", LogType.NORMAL))
-            logLines.add(LogLine("======================================================================", LogType.HEADER))
-            logLines.add(LogLine("  Summary", LogType.HEADER))
-            logLines.add(LogLine("----------------------------------------------------------------------", LogType.HEADER))
-
-            val whiteOk = whiteResults.count { it.verdict == Verdict.OK }
-            logLines.add(LogLine("  Whitelist: $whiteOk/${whitelistTargets.size} working", if (whiteOk == whitelistTargets.size) LogType.SUCCESS else LogType.WARNING))
-
-            val blackOpen = blackResults.count { it.verdict == Verdict.OK }
-            val blackBlocked = blackResults.count { it.verdict != Verdict.OK && it.verdict != Verdict.DOWN }
-            logLines.add(LogLine("  Blacklist: $blackOpen/${blacklistTargets.size} open, $blackBlocked/${blacklistTargets.size} blocked", LogType.NORMAL))
-
-            logLines.add(LogLine("", LogType.NORMAL))
-            if (blackBlocked == 0) {
-                logLines.add(LogLine("  → No blocks detected on blacklisted sites.", LogType.SUCCESS))
-            } else if (blackBlocked == blacklistTargets.size) {
-                logLines.add(LogLine("  → Full blocking active — all tested blacklisted sites are blocked.", LogType.ERROR))
-            } else {
-                logLines.add(LogLine("  → Partial blocks - some blacklisted sites still load.", LogType.WARNING))
-                logLines.add(LogLine("    Mixed signals. May indicate selective filtering, a mix of real blocks and unrelated server issues, or a CDN flake.", LogType.INFO))
-            }
-
-            val tlsDpiCount = blackResults.count { it.verdict == Verdict.TLS_BLOCK || it.verdict == Verdict.TCP_RESET }
-            val stubCount = blackResults.count { it.verdict == Verdict.HTTP_STUB }
-            val dnsBlockCount = blackResults.count { it.verdict == Verdict.DNS_BLOCK }
-            val timeoutCount = blackResults.count { it.verdict == Verdict.TIMEOUT }
-
-            if (blackBlocked > 0) {
-                logLines.add(LogLine("", LogType.NORMAL))
-                logLines.add(LogLine("  Block types in the blacklist:", LogType.INFO))
-                if (tlsDpiCount > 0) logLines.add(LogLine("    ✗ TLS DPI: $tlsDpiCount", LogType.WARNING))
-                if (stubCount > 0) logLines.add(LogLine("    ✗ HTTP Stub: $stubCount", LogType.ERROR))
-                if (dnsBlockCount > 0) logLines.add(LogLine("    ⛔ DNS Block: $dnsBlockCount", LogType.ERROR))
-                if (timeoutCount > 0) logLines.add(LogLine("    ? TCP Timeout: $timeoutCount", LogType.ERROR))
-            }
-
-            logLines.add(LogLine("======================================================================", LogType.HEADER))
 
             isRunning = false
         }
     }
 
-    // Auto scroll to bottom
-    LaunchedEffect(logLines.size) {
-        if (logLines.isNotEmpty()) {
-            listState.animateScrollToItem(logLines.size - 1)
-        }
-    }
-
-    // Run tests automatically on launch
     LaunchedEffect(Unit) {
         runTests()
+    }
+
+    val allResultsList = (whitelistTargets + blacklistTargets).mapNotNull { resultsMap[it.name] }
+    val filteredResults = when (selectedTab) {
+        1 -> allResultsList.filter { it.target.isWhitelist }
+        2 -> allResultsList.filter { !it.target.isWhitelist }
+        3 -> allResultsList.filter { it.verdict != Verdict.OK && it.verdict != Verdict.TESTING && it.verdict != Verdict.UNKNOWN && it.verdict != Verdict.DOWN }
+        else -> allResultsList
+    }
+
+    val whiteOk = whitelistTargets.count { resultsMap[it.name]?.verdict == Verdict.OK }
+    val blackOpen = blacklistTargets.count { resultsMap[it.name]?.verdict == Verdict.OK }
+    val blackBlocked = blacklistTargets.count {
+        val v = resultsMap[it.name]?.verdict
+        v != null && v != Verdict.OK && v != Verdict.TESTING && v != Verdict.UNKNOWN && v != Verdict.DOWN
     }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .systemBarsPadding()
-            .padding(16.dp)
+            .background(Color(0xFF0C0C0C))
     ) {
-        // Console Screen Output
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .background(Color(0xFF0F0F0F), shape = RoundedCornerShape(8.dp))
-                .padding(12.dp)
+        // App Header Bar
+        Surface(
+            color = Color(0xFF141414),
+            shadowElevation = 4.dp
         ) {
-            LazyColumn(
-                state = listState,
-                modifier = Modifier.fillMaxSize()
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                items(logLines) { line ->
-                    val color = when (line.type) {
-                        LogType.HEADER -> Color(0xFF00E5FF) // Cyan
-                        LogType.INFO -> Color(0xFF8E8E93) // Gray
-                        LogType.SUCCESS -> Color(0xFF00FF66) // Green
-                        LogType.WARNING -> Color(0xFFFFCC00) // Yellow/Orange
-                        LogType.ERROR -> Color(0xFFFF3366) // Red/Pink
-                        LogType.NORMAL -> Color(0xFFE5E5EA) // White
-                    }
-                    val weight = if (line.type == LogType.HEADER) FontWeight.Bold else FontWeight.Normal
-
+                Column {
                     Text(
-                        text = line.text,
-                        color = color,
-                        fontFamily = FontFamily.Monospace,
-                        fontSize = 12.sp,
-                        fontWeight = weight,
-                        modifier = Modifier.padding(vertical = 1.dp)
+                        text = "RKN BLOCK CHECKER",
+                        color = Color(0xFF00E5FF),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        letterSpacing = 1.sp,
+                        fontFamily = FontFamily.Monospace
                     )
+                    Text(
+                        text = if (isRunning) "Scanning connection..." else "Diagnostics Ready",
+                        color = Color(0xFF8E8E93),
+                        fontSize = 12.sp
+                    )
+                }
+
+                IconButton(
+                    onClick = { runTests() },
+                    enabled = !isRunning
+                ) {
+                    if (isRunning) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(22.dp),
+                            color = Color(0xFF00E5FF),
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = "Restart",
+                            tint = Color(0xFF00E5FF)
+                        )
+                    }
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Restart Test Button
-        Button(
-            onClick = { runTests() },
-            enabled = !isRunning,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF00E5FF),
-                disabledContainerColor = Color(0xFF2C2C2C),
-                contentColor = Color.Black,
-                disabledContentColor = Color.Gray
-            ),
-            shape = RoundedCornerShape(6.dp),
+        LazyColumn(
+            state = listState,
             modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp)
+                .weight(1f)
+                .padding(horizontal = 14.dp),
+            contentPadding = PaddingValues(top = 12.dp, bottom = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Refresh,
-                    contentDescription = "Restart Icon",
-                    modifier = Modifier.size(20.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = if (isRunning) "TESTING..." else "RESTART TEST",
-                    fontFamily = FontFamily.Monospace,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 15.sp
+            // 1. Connection Header Card
+            item {
+                NetworkHeaderCard(ipInfo = ipInfo)
+            }
+
+            // 2. Summary Overview Card
+            item {
+                SummaryOverviewCard(
+                    whiteOk = whiteOk,
+                    whiteTotal = whitelistTargets.size,
+                    blackOpen = blackOpen,
+                    blackBlocked = blackBlocked,
+                    blackTotal = blacklistTargets.size,
+                    results = allResultsList
                 )
             }
+
+            // 3. Filter Chips Row
+            item {
+                ScrollableTabRow(
+                    selectedTabIndex = selectedTab,
+                    edgePadding = 0.dp,
+                    containerColor = Color.Transparent,
+                    contentColor = Color(0xFF00E5FF),
+                    divider = {}
+                ) {
+                    val tabs = listOf(
+                        "All (${allResultsList.size})",
+                        "Whitelist (${whitelistTargets.size})",
+                        "Blacklist (${blacklistTargets.size})",
+                        "Blocked ($blackBlocked)"
+                    )
+                    tabs.forEachIndexed { index, title ->
+                        Tab(
+                            selected = selectedTab == index,
+                            onClick = { selectedTab = index },
+                            text = {
+                                Text(
+                                    text = title,
+                                    fontSize = 13.sp,
+                                    fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal,
+                                    color = if (selectedTab == index) Color(0xFF00E5FF) else Color(0xFF8E8E93)
+                                )
+                            }
+                        )
+                    }
+                }
+            }
+
+            // 4. Target Result Cards
+            items(filteredResults, key = { it.target.name }) { result ->
+                SiteResultCard(res = result)
+            }
         }
+    }
+}
+
+@Composable
+fun NetworkHeaderCard(ipInfo: IpInfo?) {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF161618)),
+        shape = RoundedCornerShape(12.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(1.dp, Color(0xFF26262A), RoundedCornerShape(12.dp))
+    ) {
+        Column(modifier = Modifier.padding(14.dp)) {
+            Text(
+                text = "CONNECTION INFO",
+                color = Color(0xFF8E8E93),
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 1.sp
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(text = "IP Address", color = Color(0xFF6E6E73), fontSize = 11.sp)
+                    Text(
+                        text = ipInfo?.ip ?: "Detecting...",
+                        color = Color.White,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 14.sp,
+                        fontFamily = FontFamily.Monospace
+                    )
+                }
+                Column(modifier = Modifier.weight(1.2f)) {
+                    Text(text = "ISP / Provider", color = Color(0xFF6E6E73), fontSize = 11.sp)
+                    Text(
+                        text = ipInfo?.isp ?: "Detecting...",
+                        color = Color.White,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 13.sp,
+                        maxLines = 1
+                    )
+                }
+            }
+            if (ipInfo?.location != null) {
+                Spacer(modifier = Modifier.height(6.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(text = "Location: ", color = Color(0xFF6E6E73), fontSize = 11.sp)
+                    Text(text = ipInfo.location, color = Color(0xFFD1D1D6), fontSize = 12.sp)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun SummaryOverviewCard(
+    whiteOk: Int,
+    whiteTotal: Int,
+    blackOpen: Int,
+    blackBlocked: Int,
+    blackTotal: Int,
+    results: List<CheckResult>
+) {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF161618)),
+        shape = RoundedCornerShape(12.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(1.dp, Color(0xFF26262A), RoundedCornerShape(12.dp))
+    ) {
+        Column(modifier = Modifier.padding(14.dp)) {
+            Text(
+                text = "DIAGNOSTIC SUMMARY",
+                color = Color(0xFF8E8E93),
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 1.sp
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                // Whitelist Pill
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Color(0xFF1A2620))
+                        .padding(10.dp)
+                ) {
+                    Column {
+                        Text(text = "Whitelist", color = Color(0xFF8E8E93), fontSize = 11.sp)
+                        Text(
+                            text = "$whiteOk / $whiteTotal OK",
+                            color = Color(0xFF00FF66),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 14.sp
+                        )
+                    }
+                }
+
+                // Blacklist Pill
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(if (blackBlocked > 0) Color(0xFF331E22) else Color(0xFF1A2620))
+                        .padding(10.dp)
+                ) {
+                    Column {
+                        Text(text = "Blacklist", color = Color(0xFF8E8E93), fontSize = 11.sp)
+                        Text(
+                            text = "$blackOpen Open · $blackBlocked Blocked",
+                            color = if (blackBlocked > 0) Color(0xFFFF3366) else Color(0xFF00FF66),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 13.sp
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            val bannerText = when {
+                blackBlocked == 0 -> "→ No blocks detected on blacklisted sites."
+                blackBlocked == blackTotal -> "→ Full DPI blocking active — all blacklisted sites blocked."
+                else -> "→ Selective DPI filtering active (partial blocks detected)."
+            }
+            val bannerColor = when {
+                blackBlocked == 0 -> Color(0xFF00FF66)
+                blackBlocked == blackTotal -> Color(0xFFFF3366)
+                else -> Color(0xFFFFCC00)
+            }
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = if (blackBlocked == 0) Icons.Default.CheckCircle else Icons.Default.Warning,
+                    contentDescription = null,
+                    tint = bannerColor,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = bannerText,
+                    color = bannerColor,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+
+            val tlsDpi = results.count { !it.target.isWhitelist && (it.verdict == Verdict.TLS_BLOCK || it.verdict == Verdict.TCP_RESET) }
+            val stubCount = results.count { !it.target.isWhitelist && it.verdict == Verdict.HTTP_STUB }
+            val dnsCount = results.count { !it.target.isWhitelist && it.verdict == Verdict.DNS_BLOCK }
+            val timeoutCount = results.count { !it.target.isWhitelist && it.verdict == Verdict.TIMEOUT }
+
+            if (blackBlocked > 0) {
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    if (tlsDpi > 0) BlockChip(label = "TLS DPI: $tlsDpi", color = Color(0xFFFFCC00))
+                    if (stubCount > 0) BlockChip(label = "HTTP Stub: $stubCount", color = Color(0xFFFF3366))
+                    if (dnsCount > 0) BlockChip(label = "DNS Block: $dnsCount", color = Color(0xFFFF3366))
+                    if (timeoutCount > 0) BlockChip(label = "Timeout: $timeoutCount", color = Color(0xFFFF3366))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun BlockChip(label: String, color: Color) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(6.dp))
+            .background(color.copy(alpha = 0.15f))
+            .border(1.dp, color.copy(alpha = 0.3f), RoundedCornerShape(6.dp))
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+    ) {
+        Text(
+            text = label,
+            color = color,
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Medium
+        )
+    }
+}
+
+@Composable
+fun SiteResultCard(res: CheckResult) {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF161618)),
+        shape = RoundedCornerShape(10.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(1.dp, Color(0xFF26262A), RoundedCornerShape(10.dp))
+    ) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            // Header Row: Name + Whitelist/Blacklist Tag + Verdict Badge
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = res.target.name,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 15.sp
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    TagChip(
+                        label = if (res.target.isWhitelist) "WHITELIST" else "BLACKLIST",
+                        color = if (res.target.isWhitelist) Color(0xFF00E5FF) else Color(0xFFBF5AF2)
+                    )
+                }
+
+                // Verdict Badge
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(res.verdict.badgeBg)
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                ) {
+                    Text(
+                        text = res.verdict.label,
+                        color = res.verdict.badgeFg,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 12.sp,
+                        fontFamily = FontFamily.Monospace
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Metrics Row
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                MetricItem(label = "TCP", value = res.tcpTimeMs?.let { "${it}ms" } ?: "-")
+                MetricItem(label = "TLS", value = res.tlsTimeMs?.let { "${it}ms" } ?: "-")
+                MetricItem(label = "PLT", value = res.pltMs?.let { "${it}ms" } ?: "-")
+                MetricItem(label = "Status", value = res.statusCode?.toString() ?: "-")
+            }
+
+            // Notes Section
+            if (res.notes.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(Color(0xFF202024))
+                        .padding(8.dp)
+                ) {
+                    res.notes.forEach { note ->
+                        Row(modifier = Modifier.padding(vertical = 2.dp)) {
+                            Text(
+                                text = "• ",
+                                color = Color(0xFFFFCC00),
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = note,
+                                color = Color(0xFFD1D1D6),
+                                fontSize = 11.sp,
+                                lineHeight = 14.sp
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun TagChip(label: String, color: Color) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(4.dp))
+            .background(color.copy(alpha = 0.12f))
+            .border(1.dp, color.copy(alpha = 0.4f), RoundedCornerShape(4.dp))
+            .padding(horizontal = 5.dp, vertical = 2.dp)
+    ) {
+        Text(
+            text = label,
+            color = color,
+            fontSize = 9.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+@Composable
+fun MetricItem(label: String, value: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .clip(RoundedCornerShape(4.dp))
+            .background(Color(0xFF222226))
+            .padding(horizontal = 6.dp, vertical = 3.dp)
+    ) {
+        Text(text = "$label: ", color = Color(0xFF8E8E93), fontSize = 11.sp)
+        Text(
+            text = value,
+            color = Color.White,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 11.sp,
+            fontFamily = FontFamily.Monospace
+        )
     }
 }
