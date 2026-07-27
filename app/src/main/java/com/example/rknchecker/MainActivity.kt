@@ -53,7 +53,7 @@ private suspend fun fetchIpAndProvider(): Result<IpInfo> = withContext(Dispatche
         conn.readTimeout = 3000
         conn.requestMethod = "GET"
         conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
-        if (conn.responseCode == 200) {
+        if (conn.responseCode in 200..399) {
             val response = conn.inputStream.bufferedReader().use { it.readText() }
             val json = JSONObject(response)
             if (json.optBoolean("success", false)) {
@@ -79,7 +79,7 @@ private suspend fun fetchIpAndProvider(): Result<IpInfo> = withContext(Dispatche
         conn.readTimeout = 3000
         conn.requestMethod = "GET"
         conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
-        if (conn.responseCode == 200) {
+        if (conn.responseCode in 200..399) {
             val response = conn.inputStream.bufferedReader().use { it.readText() }
             val json = JSONObject(response)
             val ip = json.optString("ip", "Unknown")
@@ -100,7 +100,7 @@ private suspend fun fetchIpAndProvider(): Result<IpInfo> = withContext(Dispatche
         conn.readTimeout = 3000
         conn.requestMethod = "GET"
         conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
-        if (conn.responseCode == 200) {
+        if (conn.responseCode in 200..399) {
             val response = conn.inputStream.bufferedReader().use { it.readText() }
             val json = JSONObject(response)
             val ip = json.optString("ip", "Unknown")
@@ -121,7 +121,7 @@ private suspend fun fetchIpAndProvider(): Result<IpInfo> = withContext(Dispatche
         conn.readTimeout = 3000
         conn.requestMethod = "GET"
         conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
-        if (conn.responseCode == 200) {
+        if (conn.responseCode in 200..399) {
             val response = conn.inputStream.bufferedReader().use { it.readText() }
             val json = JSONObject(response)
             val ip = json.optString("ip", "Unknown")
@@ -173,7 +173,7 @@ fun ConsoleCheckerScreen() {
             "mail.ru",
             "online.sberbank.ru",
             "web.max.ru",
-            "id.tbank.ru",
+            "tbank.ru",
             "vk.com",
             "ozon.ru",
             "wb.ru",
@@ -260,7 +260,7 @@ fun ConsoleCheckerScreen() {
                             conn.requestMethod = "GET"
                             conn.connectTimeout = 4000
                             conn.readTimeout = 4000
-                            conn.instanceFollowRedirects = true
+                            conn.instanceFollowRedirects = false
                             conn.setRequestProperty(
                                 "User-Agent",
                                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
@@ -268,7 +268,10 @@ fun ConsoleCheckerScreen() {
                             
                             // Initiating connection and fetching response code
                             responseCode = conn.responseCode
-                            httpsSuccess = true
+                            httpsSuccess = responseCode in 200..399
+                            if (!httpsSuccess) {
+                                httpsErrorMsg = "HTTP $responseCode"
+                            }
                             conn.disconnect()
                         }
                     } catch (e: Exception) {
