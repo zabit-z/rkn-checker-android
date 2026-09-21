@@ -3,6 +3,7 @@ options:
   bundleIdPrefix: com.example
   deploymentTarget:
     iOS: 17.0
+    macOS: 14.0
   createIntermediateGroups: true
 
 settings:
@@ -43,6 +44,23 @@ targets:
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: "AccentColor"
         TARGETED_DEVICE_FAMILY: "1,2"
         INFOPLIST_FILE: "RKNChecker/App/Info.plist"
+
+  RKNCheckerMac:
+    type: application
+    platform: macOS
+    sources:
+      - path: RKNChecker
+        excludes:
+          - App/Info.plist
+          - App/RKNCheckerApp.swift
+      - path: RKNCheckerMac
+    settings:
+      base:
+        PRODUCT_NAME: "RKNChecker"
+        PRODUCT_BUNDLE_IDENTIFIER: "com.example.rknchecker.mac"
+        MACOSX_DEPLOYMENT_TARGET: "14.0"
+        COMBINE_HIDPI_IMAGES: YES
+        CODE_SIGN_IDENTITY: "-"
 
   RKNCheckerTests:
     type: bundle.unit-test

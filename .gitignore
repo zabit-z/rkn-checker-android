@@ -44,6 +44,8 @@ replay_pid*
 # Swift / Xcode build artifacts
 .build/
 **/.build/
+.swiftpm/
+**/.swiftpm/
 *.xcuserstate
 project.xcworkspace
 xcuserdata/

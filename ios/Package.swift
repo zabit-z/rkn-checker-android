@@ -8,6 +8,10 @@ let package = Package(
         .macOS(.v14)
     ],
     products: [
+        .executable(
+            name: "rkn-checker",
+            targets: ["RKNCheckerMac"]
+        ),
         .library(
             name: "RKNChecker",
             targets: ["RKNChecker"]
@@ -19,6 +23,11 @@ let package = Package(
             name: "RKNChecker",
             path: "RKNChecker",
             exclude: ["App/Info.plist", "Resources", "App/RKNCheckerApp.swift"]
+        ),
+        .executableTarget(
+            name: "RKNCheckerMac",
+            dependencies: ["RKNChecker"],
+            path: "RKNCheckerMac"
         ),
         .testTarget(
             name: "RKNCheckerTests",

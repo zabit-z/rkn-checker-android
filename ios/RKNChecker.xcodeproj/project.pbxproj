@@ -7,28 +7,51 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		000A7CB552FB8F75C7675E42 /* iPadGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172813ECBA8249031F072B04 /* iPadGridView.swift */; };
+		00EBBF9A08D896830BBFB87E /* NetworkDiagnosticsEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DE5311A2E5BB792FBD73AF /* NetworkDiagnosticsEngine.swift */; };
+		069FCFB64E23745DECBEBF13 /* MainAdaptiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E613E4D5F9EA808D5DDE6F /* MainAdaptiveView.swift */; };
+		1655CE85DD34EA9D59AE7A79 /* TLSProber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CC8A041ED9719B2CB0F74 /* TLSProber.swift */; };
 		1B5C0E8262265549F5430034 /* TCPProber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBF2FD6A8590F70EC982422 /* TCPProber.swift */; };
+		1E4119671E7E9DADC0E0A0A7 /* DoHResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1903829DE1024DA148B9FEF3 /* DoHResolver.swift */; };
 		28FB277DB51BDC2EF4E313B9 /* SiteResultCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CEBF914E52D7934D25D0EAA /* SiteResultCardView.swift */; };
 		2C17E6CF0255D168B40F0E71 /* BlockChipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C566884E637FA2EB3BCC3C /* BlockChipView.swift */; };
 		2DF66D2B4AC632A70CC1CA94 /* NetworkDiagnosticsEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DE5311A2E5BB792FBD73AF /* NetworkDiagnosticsEngine.swift */; };
 		3595DB1DAB065F1945D8BA96 /* iPadSplitContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E173455ACE8248EC093BD08 /* iPadSplitContainerView.swift */; };
 		366231108BEB31DF3FF5B6C9 /* iPadGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172813ECBA8249031F072B04 /* iPadGridView.swift */; };
+		444E5E3938086EDC7D3E5AFE /* SiteDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8EF8F4DFC6C4096E649B5F5 /* SiteDetailSheet.swift */; };
 		459FAD234FC7C34EBF199413 /* NetworkHeaderCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677C56DD2400A96DBE148FEA /* NetworkHeaderCardView.swift */; };
 		47779E7144309967229E9739 /* DiagnosticEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16AC8698359294ACDA89F1A3 /* DiagnosticEngineTests.swift */; };
+		49B57F7EE114F5AE72CBFF16 /* IpInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DF36C7DE265D21CCA94143 /* IpInfo.swift */; };
 		4CAEBD251624760C0548B228 /* SiteDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8EF8F4DFC6C4096E649B5F5 /* SiteDetailSheet.swift */; };
+		4CF2D1D3AB878FA5EA98399B /* RKNCheckerMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B636E7CD4FBBA844817696B9 /* RKNCheckerMacApp.swift */; };
 		4EA77F5B7F5C69776A4D4237 /* SystemDNSResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC5EEC96A05B19B93DA8882 /* SystemDNSResolver.swift */; };
 		51ED1343AF7FD11E49D3AE9E /* TargetItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669BC470C3013C2642403A2 /* TargetItem.swift */; };
+		5C13AD4950FB8164E443CF2B /* CheckerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656F7BD355A94C464318D9D0 /* CheckerViewModel.swift */; };
+		6158D690748A2310ED554F4C /* NetworkHeaderCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677C56DD2400A96DBE148FEA /* NetworkHeaderCardView.swift */; };
 		6BC0FBDC5AABB4A5182B1F9A /* HTTPProber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12256EA2F529F18185D0E3F5 /* HTTPProber.swift */; };
+		6DAD4655D8CCD65AECC8DE2C /* iPadSplitContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E173455ACE8248EC093BD08 /* iPadSplitContainerView.swift */; };
 		7017BACBB56339B5D8C045FA /* Verdict.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB773B7DEEAECB810D1A1192 /* Verdict.swift */; };
+		70F8DE1716F0239173459994 /* SummaryOverviewCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD772736D17BA9D9010BCE40 /* SummaryOverviewCardView.swift */; };
+		7CB9B0BF8F33BEF395E1BFE0 /* CheckResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86E4C31E7D8BB927D14C2CB /* CheckResult.swift */; };
+		80945CA397CB7C75E5EB3C3F /* MetricPillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3EF926786655AD12F6ABB17 /* MetricPillView.swift */; };
+		83389B82868C3B84A6D596B7 /* SiteResultCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CEBF914E52D7934D25D0EAA /* SiteResultCardView.swift */; };
 		8EF617858B2F8AD3F8D4CEE7 /* VerdictBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F1AF01ACD7F1E3083DF54A /* VerdictBadgeView.swift */; };
+		97186BA5F3E5B3258F1A4FA2 /* HTTPProber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12256EA2F529F18185D0E3F5 /* HTTPProber.swift */; };
 		9D0DF873A66B9C8B098781BB /* MainAdaptiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E613E4D5F9EA808D5DDE6F /* MainAdaptiveView.swift */; };
+		A65339083B683AD60B1E6AFD /* TCPProber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBF2FD6A8590F70EC982422 /* TCPProber.swift */; };
+		B27C19D7AB65C3281FF5A3CE /* VerdictBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F1AF01ACD7F1E3083DF54A /* VerdictBadgeView.swift */; };
+		B3D94A2C9C149DB06E6B90F8 /* Verdict.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB773B7DEEAECB810D1A1192 /* Verdict.swift */; };
 		BC1BDD86286C146537F07CFA /* DoHResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1903829DE1024DA148B9FEF3 /* DoHResolver.swift */; };
+		C2931BD336FE4AE2E5217308 /* SystemDNSResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC5EEC96A05B19B93DA8882 /* SystemDNSResolver.swift */; };
 		CA6E3E373E2DC5BA72C54CE7 /* CheckResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86E4C31E7D8BB927D14C2CB /* CheckResult.swift */; };
 		CE0F5B7F9D9CC4A29AC7F951 /* TLSProber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CC8A041ED9719B2CB0F74 /* TLSProber.swift */; };
 		D8F179C1D0FAACB223FCBF27 /* IpInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DF36C7DE265D21CCA94143 /* IpInfo.swift */; };
 		E66EDB5B59F5A46FD7774A90 /* CheckerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656F7BD355A94C464318D9D0 /* CheckerViewModel.swift */; };
 		EEEEAF510199EF3D6387A7D2 /* MetricPillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3EF926786655AD12F6ABB17 /* MetricPillView.swift */; };
 		F19F340D7B294A5BBFC0E61A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55A0570B3771CC1C0EE41FC0 /* Assets.xcassets */; };
+		F57E8C8A0B0BA9F1D45B8224 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55A0570B3771CC1C0EE41FC0 /* Assets.xcassets */; };
+		F748A8868BFEC3BDCE131BF8 /* BlockChipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C566884E637FA2EB3BCC3C /* BlockChipView.swift */; };
+		F8A7EE436B88AD11658CC36A /* TargetItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669BC470C3013C2642403A2 /* TargetItem.swift */; };
 		FB4715F33374E3A654F9C547 /* RKNCheckerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11B2B3021794B3837B9333A /* RKNCheckerApp.swift */; };
 		FF29F21C393671ECE3FE802B /* SummaryOverviewCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD772736D17BA9D9010BCE40 /* SummaryOverviewCardView.swift */; };
 /* End PBXBuildFile section */
@@ -56,6 +79,7 @@
 		49F1AF01ACD7F1E3083DF54A /* VerdictBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerdictBadgeView.swift; sourceTree = "<group>"; };
 		4B2CC8A041ED9719B2CB0F74 /* TLSProber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TLSProber.swift; sourceTree = "<group>"; };
 		4CEBF914E52D7934D25D0EAA /* SiteResultCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteResultCardView.swift; sourceTree = "<group>"; };
+		52DF68FC192EE395A0EE8FB9 /* RKNCheckerMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RKNCheckerMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		55A0570B3771CC1C0EE41FC0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		656F7BD355A94C464318D9D0 /* CheckerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckerViewModel.swift; sourceTree = "<group>"; };
 		677C56DD2400A96DBE148FEA /* NetworkHeaderCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkHeaderCardView.swift; sourceTree = "<group>"; };
@@ -63,6 +87,7 @@
 		A86E4C31E7D8BB927D14C2CB /* CheckResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckResult.swift; sourceTree = "<group>"; };
 		A9E613E4D5F9EA808D5DDE6F /* MainAdaptiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAdaptiveView.swift; sourceTree = "<group>"; };
 		B3EF926786655AD12F6ABB17 /* MetricPillView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricPillView.swift; sourceTree = "<group>"; };
+		B636E7CD4FBBA844817696B9 /* RKNCheckerMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RKNCheckerMacApp.swift; sourceTree = "<group>"; };
 		B9DF36C7DE265D21CCA94143 /* IpInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IpInfo.swift; sourceTree = "<group>"; };
 		BDB621BB364929E90B70A395 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C5C566884E637FA2EB3BCC3C /* BlockChipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockChipView.swift; sourceTree = "<group>"; };
@@ -74,6 +99,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		046AB3E6869774BAD9FC4E94 /* RKNCheckerMac */ = {
+			isa = PBXGroup;
+			children = (
+				B636E7CD4FBBA844817696B9 /* RKNCheckerMacApp.swift */,
+			);
+			path = RKNCheckerMac;
+			sourceTree = "<group>";
+		};
 		0D56A1BA03A46F0ED526BE73 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
@@ -148,6 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				805C72F1E291FE97A85FF410 /* RKNChecker */,
+				046AB3E6869774BAD9FC4E94 /* RKNCheckerMac */,
 				CF249403BFA611CF78780501 /* Tests */,
 				CE94A9E780C0964C7C16D283 /* Products */,
 			);
@@ -168,6 +202,7 @@
 			isa = PBXGroup;
 			children = (
 				026B79F5F993933C1235CA5D /* RKNChecker.app */,
+				52DF68FC192EE395A0EE8FB9 /* RKNCheckerMac.app */,
 				CC862F736C896E2FF34047DF /* RKNCheckerTests.xctest */,
 			);
 			name = Products;
@@ -214,6 +249,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		ACE9D9EF9B0E217BC1BD8886 /* RKNCheckerMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FA402AAF2FFADE9CFF42951D /* Build configuration list for PBXNativeTarget "RKNCheckerMac" */;
+			buildPhases = (
+				122AEF8B3AB9CA3754FC7390 /* Sources */,
+				2014036E0DCEB575AAB4D5C0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RKNCheckerMac;
+			packageProductDependencies = (
+			);
+			productName = RKNCheckerMac;
+			productReference = 52DF68FC192EE395A0EE8FB9 /* RKNCheckerMac.app */;
+			productType = "com.apple.product-type.application";
+		};
 		C99061AFDF906C6FBC6BCDF9 /* RKNChecker */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6A509A9DBA70B2788454B4A6 /* Build configuration list for PBXNativeTarget "RKNChecker" */;
@@ -276,12 +329,21 @@
 			projectRoot = "";
 			targets = (
 				C99061AFDF906C6FBC6BCDF9 /* RKNChecker */,
+				ACE9D9EF9B0E217BC1BD8886 /* RKNCheckerMac */,
 				DF3724A1FE1E7C67101423FD /* RKNCheckerTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		2014036E0DCEB575AAB4D5C0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F57E8C8A0B0BA9F1D45B8224 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6A4B5D5244A981F2415FD2C8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -293,6 +355,35 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		122AEF8B3AB9CA3754FC7390 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F748A8868BFEC3BDCE131BF8 /* BlockChipView.swift in Sources */,
+				7CB9B0BF8F33BEF395E1BFE0 /* CheckResult.swift in Sources */,
+				5C13AD4950FB8164E443CF2B /* CheckerViewModel.swift in Sources */,
+				1E4119671E7E9DADC0E0A0A7 /* DoHResolver.swift in Sources */,
+				97186BA5F3E5B3258F1A4FA2 /* HTTPProber.swift in Sources */,
+				49B57F7EE114F5AE72CBFF16 /* IpInfo.swift in Sources */,
+				069FCFB64E23745DECBEBF13 /* MainAdaptiveView.swift in Sources */,
+				80945CA397CB7C75E5EB3C3F /* MetricPillView.swift in Sources */,
+				00EBBF9A08D896830BBFB87E /* NetworkDiagnosticsEngine.swift in Sources */,
+				6158D690748A2310ED554F4C /* NetworkHeaderCardView.swift in Sources */,
+				4CF2D1D3AB878FA5EA98399B /* RKNCheckerMacApp.swift in Sources */,
+				444E5E3938086EDC7D3E5AFE /* SiteDetailSheet.swift in Sources */,
+				83389B82868C3B84A6D596B7 /* SiteResultCardView.swift in Sources */,
+				70F8DE1716F0239173459994 /* SummaryOverviewCardView.swift in Sources */,
+				C2931BD336FE4AE2E5217308 /* SystemDNSResolver.swift in Sources */,
+				A65339083B683AD60B1E6AFD /* TCPProber.swift in Sources */,
+				1655CE85DD34EA9D59AE7A79 /* TLSProber.swift in Sources */,
+				F8A7EE436B88AD11658CC36A /* TargetItem.swift in Sources */,
+				B3D94A2C9C149DB06E6B90F8 /* Verdict.swift in Sources */,
+				B27C19D7AB65C3281FF5A3CE /* VerdictBadgeView.swift in Sources */,
+				000A7CB552FB8F75C7675E42 /* iPadGridView.swift in Sources */,
+				6DAD4655D8CCD65AECC8DE2C /* iPadSplitContainerView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1AC9B316024F064AF997223C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -341,6 +432,24 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		009A0D8168AD6E72704BCD06 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = RKNChecker/App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.rknchecker.mac;
+				PRODUCT_NAME = RKNChecker;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
 		2978BC2A58FF3D8221AE0A91 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -394,11 +503,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.9;
@@ -503,14 +612,32 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.9;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D2814CE29166B0C35CA434AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = RKNChecker/App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.rknchecker.mac;
+				PRODUCT_NAME = RKNChecker;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -558,6 +685,15 @@
 			buildConfigurations = (
 				2978BC2A58FF3D8221AE0A91 /* Debug */,
 				C121BE8E2DE6451B26E8FBAA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		FA402AAF2FFADE9CFF42951D /* Build configuration list for PBXNativeTarget "RKNCheckerMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				009A0D8168AD6E72704BCD06 /* Debug */,
+				D2814CE29166B0C35CA434AD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

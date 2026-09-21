@@ -65,17 +65,9 @@ public enum TCPProber {
                     return
                 }
                 
-                // Ожидание готовности сокета через select
-                var writeSet = fd_set()
-                writeSet.zero()
-                writeSet.set(sock)
-                
-                var tv = timeval(
-                    tv_sec: Int(timeoutMs / 1000),
-                    tv_usec: Int32((timeoutMs % 1000) * 1000)
-                )
-                
-                let sel = select(sock + 1, nil, &writeSet, nil, &tv)
+                // Ожидание готовности сокета через poll (безопасно, без переполнений битовых масок fd_set)
+                var pfd = pollfd(fd: sock, events: Int16(POLLOUT), revents: 0)
+                let sel = poll(&pfd, 1, Int32(timeoutMs))
                 if sel == 0 {
                     // Таймаут
                     continuation.resume(returning: TcpCheckResult(ok: false, timeMs: nil, error: "timeout"))
@@ -100,22 +92,6 @@ public enum TCPProber {
                     continuation.resume(returning: TcpCheckResult(ok: false, timeMs: nil, error: errDesc))
                 }
             }
-        }
-    }
-}
-
-private extension fd_set {
-    mutating func zero() {
-        self = fd_set()
-    }
-    
-    mutating func set(_ fd: Int32) {
-        let intOffset = Int(fd / 32)
-        let bitOffset = fd % 32
-        let mask = Int32(1 << bitOffset)
-        withUnsafeMutableBytes(of: &self) { rawPtr in
-            let ptr = rawPtr.bindMemory(to: Int32.self)
-            ptr[intOffset] |= mask
         }
     }
 }
