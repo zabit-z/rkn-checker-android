@@ -1,0 +1,568 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1B5C0E8262265549F5430034 /* TCPProber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBF2FD6A8590F70EC982422 /* TCPProber.swift */; };
+		28FB277DB51BDC2EF4E313B9 /* SiteResultCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CEBF914E52D7934D25D0EAA /* SiteResultCardView.swift */; };
+		2C17E6CF0255D168B40F0E71 /* BlockChipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C566884E637FA2EB3BCC3C /* BlockChipView.swift */; };
+		2DF66D2B4AC632A70CC1CA94 /* NetworkDiagnosticsEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DE5311A2E5BB792FBD73AF /* NetworkDiagnosticsEngine.swift */; };
+		3595DB1DAB065F1945D8BA96 /* iPadSplitContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E173455ACE8248EC093BD08 /* iPadSplitContainerView.swift */; };
+		366231108BEB31DF3FF5B6C9 /* iPadGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172813ECBA8249031F072B04 /* iPadGridView.swift */; };
+		459FAD234FC7C34EBF199413 /* NetworkHeaderCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677C56DD2400A96DBE148FEA /* NetworkHeaderCardView.swift */; };
+		47779E7144309967229E9739 /* DiagnosticEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16AC8698359294ACDA89F1A3 /* DiagnosticEngineTests.swift */; };
+		4CAEBD251624760C0548B228 /* SiteDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8EF8F4DFC6C4096E649B5F5 /* SiteDetailSheet.swift */; };
+		4EA77F5B7F5C69776A4D4237 /* SystemDNSResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC5EEC96A05B19B93DA8882 /* SystemDNSResolver.swift */; };
+		51ED1343AF7FD11E49D3AE9E /* TargetItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669BC470C3013C2642403A2 /* TargetItem.swift */; };
+		6BC0FBDC5AABB4A5182B1F9A /* HTTPProber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12256EA2F529F18185D0E3F5 /* HTTPProber.swift */; };
+		7017BACBB56339B5D8C045FA /* Verdict.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB773B7DEEAECB810D1A1192 /* Verdict.swift */; };
+		8EF617858B2F8AD3F8D4CEE7 /* VerdictBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F1AF01ACD7F1E3083DF54A /* VerdictBadgeView.swift */; };
+		9D0DF873A66B9C8B098781BB /* MainAdaptiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E613E4D5F9EA808D5DDE6F /* MainAdaptiveView.swift */; };
+		BC1BDD86286C146537F07CFA /* DoHResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1903829DE1024DA148B9FEF3 /* DoHResolver.swift */; };
+		CA6E3E373E2DC5BA72C54CE7 /* CheckResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86E4C31E7D8BB927D14C2CB /* CheckResult.swift */; };
+		CE0F5B7F9D9CC4A29AC7F951 /* TLSProber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CC8A041ED9719B2CB0F74 /* TLSProber.swift */; };
+		D8F179C1D0FAACB223FCBF27 /* IpInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DF36C7DE265D21CCA94143 /* IpInfo.swift */; };
+		E66EDB5B59F5A46FD7774A90 /* CheckerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656F7BD355A94C464318D9D0 /* CheckerViewModel.swift */; };
+		EEEEAF510199EF3D6387A7D2 /* MetricPillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3EF926786655AD12F6ABB17 /* MetricPillView.swift */; };
+		F19F340D7B294A5BBFC0E61A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55A0570B3771CC1C0EE41FC0 /* Assets.xcassets */; };
+		FB4715F33374E3A654F9C547 /* RKNCheckerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11B2B3021794B3837B9333A /* RKNCheckerApp.swift */; };
+		FF29F21C393671ECE3FE802B /* SummaryOverviewCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD772736D17BA9D9010BCE40 /* SummaryOverviewCardView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2FBAC00CF604F353083C4C4A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 328FFA19B2221B574521D69E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C99061AFDF906C6FBC6BCDF9;
+			remoteInfo = RKNChecker;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		026B79F5F993933C1235CA5D /* RKNChecker.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = RKNChecker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		12256EA2F529F18185D0E3F5 /* HTTPProber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPProber.swift; sourceTree = "<group>"; };
+		12DE5311A2E5BB792FBD73AF /* NetworkDiagnosticsEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkDiagnosticsEngine.swift; sourceTree = "<group>"; };
+		16AC8698359294ACDA89F1A3 /* DiagnosticEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticEngineTests.swift; sourceTree = "<group>"; };
+		172813ECBA8249031F072B04 /* iPadGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPadGridView.swift; sourceTree = "<group>"; };
+		1903829DE1024DA148B9FEF3 /* DoHResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoHResolver.swift; sourceTree = "<group>"; };
+		2FBF2FD6A8590F70EC982422 /* TCPProber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCPProber.swift; sourceTree = "<group>"; };
+		3CC5EEC96A05B19B93DA8882 /* SystemDNSResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemDNSResolver.swift; sourceTree = "<group>"; };
+		3E173455ACE8248EC093BD08 /* iPadSplitContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPadSplitContainerView.swift; sourceTree = "<group>"; };
+		49F1AF01ACD7F1E3083DF54A /* VerdictBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerdictBadgeView.swift; sourceTree = "<group>"; };
+		4B2CC8A041ED9719B2CB0F74 /* TLSProber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TLSProber.swift; sourceTree = "<group>"; };
+		4CEBF914E52D7934D25D0EAA /* SiteResultCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteResultCardView.swift; sourceTree = "<group>"; };
+		55A0570B3771CC1C0EE41FC0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		656F7BD355A94C464318D9D0 /* CheckerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckerViewModel.swift; sourceTree = "<group>"; };
+		677C56DD2400A96DBE148FEA /* NetworkHeaderCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkHeaderCardView.swift; sourceTree = "<group>"; };
+		7669BC470C3013C2642403A2 /* TargetItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetItem.swift; sourceTree = "<group>"; };
+		A86E4C31E7D8BB927D14C2CB /* CheckResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckResult.swift; sourceTree = "<group>"; };
+		A9E613E4D5F9EA808D5DDE6F /* MainAdaptiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAdaptiveView.swift; sourceTree = "<group>"; };
+		B3EF926786655AD12F6ABB17 /* MetricPillView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricPillView.swift; sourceTree = "<group>"; };
+		B9DF36C7DE265D21CCA94143 /* IpInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IpInfo.swift; sourceTree = "<group>"; };
+		BDB621BB364929E90B70A395 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C5C566884E637FA2EB3BCC3C /* BlockChipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockChipView.swift; sourceTree = "<group>"; };
+		CC862F736C896E2FF34047DF /* RKNCheckerTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = RKNCheckerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D11B2B3021794B3837B9333A /* RKNCheckerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RKNCheckerApp.swift; sourceTree = "<group>"; };
+		DB773B7DEEAECB810D1A1192 /* Verdict.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Verdict.swift; sourceTree = "<group>"; };
+		E8EF8F4DFC6C4096E649B5F5 /* SiteDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteDetailSheet.swift; sourceTree = "<group>"; };
+		FD772736D17BA9D9010BCE40 /* SummaryOverviewCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryOverviewCardView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0D56A1BA03A46F0ED526BE73 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				656F7BD355A94C464318D9D0 /* CheckerViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		18057A11C90177FE103E91CC /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				E8EF8F4DFC6C4096E649B5F5 /* SiteDetailSheet.swift */,
+			);
+			path = Detail;
+			sourceTree = "<group>";
+		};
+		465021ABF0C38B83DAC4B446 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				C5C566884E637FA2EB3BCC3C /* BlockChipView.swift */,
+				B3EF926786655AD12F6ABB17 /* MetricPillView.swift */,
+				677C56DD2400A96DBE148FEA /* NetworkHeaderCardView.swift */,
+				4CEBF914E52D7934D25D0EAA /* SiteResultCardView.swift */,
+				FD772736D17BA9D9010BCE40 /* SummaryOverviewCardView.swift */,
+				49F1AF01ACD7F1E3083DF54A /* VerdictBadgeView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		56FAD66836B15586A5704313 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A86E4C31E7D8BB927D14C2CB /* CheckResult.swift */,
+				B9DF36C7DE265D21CCA94143 /* IpInfo.swift */,
+				7669BC470C3013C2642403A2 /* TargetItem.swift */,
+				DB773B7DEEAECB810D1A1192 /* Verdict.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		5C6988E1829A045C47E22388 /* RKNCheckerTests */ = {
+			isa = PBXGroup;
+			children = (
+				16AC8698359294ACDA89F1A3 /* DiagnosticEngineTests.swift */,
+			);
+			path = RKNCheckerTests;
+			sourceTree = "<group>";
+		};
+		77B2B2F25B7B8FE49A2D96D1 /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+				172813ECBA8249031F072B04 /* iPadGridView.swift */,
+				3E173455ACE8248EC093BD08 /* iPadSplitContainerView.swift */,
+			);
+			path = iPad;
+			sourceTree = "<group>";
+		};
+		805C72F1E291FE97A85FF410 /* RKNChecker */ = {
+			isa = PBXGroup;
+			children = (
+				DD8725D93BD9A90426F8290A /* App */,
+				CFA12945DF5D2DDEB5BCBD61 /* Engine */,
+				56FAD66836B15586A5704313 /* Models */,
+				CF54C64656E34CB37EE7D045 /* Resources */,
+				0D56A1BA03A46F0ED526BE73 /* ViewModels */,
+				B29895E5208761DFF1892873 /* Views */,
+			);
+			path = RKNChecker;
+			sourceTree = "<group>";
+		};
+		8601EA38DC66CCCBD4B227C8 = {
+			isa = PBXGroup;
+			children = (
+				805C72F1E291FE97A85FF410 /* RKNChecker */,
+				CF249403BFA611CF78780501 /* Tests */,
+				CE94A9E780C0964C7C16D283 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B29895E5208761DFF1892873 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A9E613E4D5F9EA808D5DDE6F /* MainAdaptiveView.swift */,
+				465021ABF0C38B83DAC4B446 /* Components */,
+				18057A11C90177FE103E91CC /* Detail */,
+				77B2B2F25B7B8FE49A2D96D1 /* iPad */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		CE94A9E780C0964C7C16D283 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				026B79F5F993933C1235CA5D /* RKNChecker.app */,
+				CC862F736C896E2FF34047DF /* RKNCheckerTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CF249403BFA611CF78780501 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				5C6988E1829A045C47E22388 /* RKNCheckerTests */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		CF54C64656E34CB37EE7D045 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				55A0570B3771CC1C0EE41FC0 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		CFA12945DF5D2DDEB5BCBD61 /* Engine */ = {
+			isa = PBXGroup;
+			children = (
+				1903829DE1024DA148B9FEF3 /* DoHResolver.swift */,
+				12256EA2F529F18185D0E3F5 /* HTTPProber.swift */,
+				12DE5311A2E5BB792FBD73AF /* NetworkDiagnosticsEngine.swift */,
+				3CC5EEC96A05B19B93DA8882 /* SystemDNSResolver.swift */,
+				2FBF2FD6A8590F70EC982422 /* TCPProber.swift */,
+				4B2CC8A041ED9719B2CB0F74 /* TLSProber.swift */,
+			);
+			path = Engine;
+			sourceTree = "<group>";
+		};
+		DD8725D93BD9A90426F8290A /* App */ = {
+			isa = PBXGroup;
+			children = (
+				BDB621BB364929E90B70A395 /* Info.plist */,
+				D11B2B3021794B3837B9333A /* RKNCheckerApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C99061AFDF906C6FBC6BCDF9 /* RKNChecker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6A509A9DBA70B2788454B4A6 /* Build configuration list for PBXNativeTarget "RKNChecker" */;
+			buildPhases = (
+				C6FD499B506ECF0BFBDEA746 /* Sources */,
+				6A4B5D5244A981F2415FD2C8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RKNChecker;
+			packageProductDependencies = (
+			);
+			productName = RKNChecker;
+			productReference = 026B79F5F993933C1235CA5D /* RKNChecker.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DF3724A1FE1E7C67101423FD /* RKNCheckerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5BD87DFE5F5C822D40784B77 /* Build configuration list for PBXNativeTarget "RKNCheckerTests" */;
+			buildPhases = (
+				1AC9B316024F064AF997223C /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				15E31726F42CD73E92BF35FC /* PBXTargetDependency */,
+			);
+			name = RKNCheckerTests;
+			packageProductDependencies = (
+			);
+			productName = RKNCheckerTests;
+			productReference = CC862F736C896E2FF34047DF /* RKNCheckerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		328FFA19B2221B574521D69E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = C326B0CDCF3A2452DE7F7C40 /* Build configuration list for PBXProject "RKNChecker" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 8601EA38DC66CCCBD4B227C8;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = CE94A9E780C0964C7C16D283 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C99061AFDF906C6FBC6BCDF9 /* RKNChecker */,
+				DF3724A1FE1E7C67101423FD /* RKNCheckerTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6A4B5D5244A981F2415FD2C8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F19F340D7B294A5BBFC0E61A /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1AC9B316024F064AF997223C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				47779E7144309967229E9739 /* DiagnosticEngineTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C6FD499B506ECF0BFBDEA746 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2C17E6CF0255D168B40F0E71 /* BlockChipView.swift in Sources */,
+				CA6E3E373E2DC5BA72C54CE7 /* CheckResult.swift in Sources */,
+				E66EDB5B59F5A46FD7774A90 /* CheckerViewModel.swift in Sources */,
+				BC1BDD86286C146537F07CFA /* DoHResolver.swift in Sources */,
+				6BC0FBDC5AABB4A5182B1F9A /* HTTPProber.swift in Sources */,
+				D8F179C1D0FAACB223FCBF27 /* IpInfo.swift in Sources */,
+				9D0DF873A66B9C8B098781BB /* MainAdaptiveView.swift in Sources */,
+				EEEEAF510199EF3D6387A7D2 /* MetricPillView.swift in Sources */,
+				2DF66D2B4AC632A70CC1CA94 /* NetworkDiagnosticsEngine.swift in Sources */,
+				459FAD234FC7C34EBF199413 /* NetworkHeaderCardView.swift in Sources */,
+				FB4715F33374E3A654F9C547 /* RKNCheckerApp.swift in Sources */,
+				4CAEBD251624760C0548B228 /* SiteDetailSheet.swift in Sources */,
+				28FB277DB51BDC2EF4E313B9 /* SiteResultCardView.swift in Sources */,
+				FF29F21C393671ECE3FE802B /* SummaryOverviewCardView.swift in Sources */,
+				4EA77F5B7F5C69776A4D4237 /* SystemDNSResolver.swift in Sources */,
+				1B5C0E8262265549F5430034 /* TCPProber.swift in Sources */,
+				CE0F5B7F9D9CC4A29AC7F951 /* TLSProber.swift in Sources */,
+				51ED1343AF7FD11E49D3AE9E /* TargetItem.swift in Sources */,
+				7017BACBB56339B5D8C045FA /* Verdict.swift in Sources */,
+				8EF617858B2F8AD3F8D4CEE7 /* VerdictBadgeView.swift in Sources */,
+				366231108BEB31DF3FF5B6C9 /* iPadGridView.swift in Sources */,
+				3595DB1DAB065F1945D8BA96 /* iPadSplitContainerView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		15E31726F42CD73E92BF35FC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C99061AFDF906C6FBC6BCDF9 /* RKNChecker */;
+			targetProxy = 2FBAC00CF604F353083C4C4A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		2978BC2A58FF3D8221AE0A91 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5A3EE4D7699841B6B9B97C22 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = RKNChecker/App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.rknchecker;
+				PRODUCT_NAME = RKNChecker;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		76CECFCE6D1C2A0ADDD62FF6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.rkncheckerTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RKNChecker.app/RKNChecker";
+			};
+			name = Debug;
+		};
+		76E278F2BEA08030EF9F3620 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.rkncheckerTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RKNChecker.app/RKNChecker";
+			};
+			name = Release;
+		};
+		C121BE8E2DE6451B26E8FBAA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		DE6768ADBB0AA142A6169A86 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = RKNChecker/App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.rknchecker;
+				PRODUCT_NAME = RKNChecker;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5BD87DFE5F5C822D40784B77 /* Build configuration list for PBXNativeTarget "RKNCheckerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				76CECFCE6D1C2A0ADDD62FF6 /* Debug */,
+				76E278F2BEA08030EF9F3620 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6A509A9DBA70B2788454B4A6 /* Build configuration list for PBXNativeTarget "RKNChecker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A3EE4D7699841B6B9B97C22 /* Debug */,
+				DE6768ADBB0AA142A6169A86 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C326B0CDCF3A2452DE7F7C40 /* Build configuration list for PBXProject "RKNChecker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2978BC2A58FF3D8221AE0A91 /* Debug */,
+				C121BE8E2DE6451B26E8FBAA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 328FFA19B2221B574521D69E /* Project object */;
+}

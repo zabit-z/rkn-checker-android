@@ -40,3 +40,12 @@ crashlytics-build.properties
 *.class
 hs_err_pid*
 replay_pid*
+
+# Swift / Xcode build artifacts
+.build/
+**/.build/
+*.xcuserstate
+project.xcworkspace
+xcuserdata/
+DerivedData/
+

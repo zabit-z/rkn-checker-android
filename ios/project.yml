@@ -1,0 +1,57 @@
+name: RKNChecker
+options:
+  bundleIdPrefix: com.example
+  deploymentTarget:
+    iOS: 17.0
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    TARGETED_DEVICE_FAMILY: "1,2"
+    ENABLE_PREVIEWS: YES
+
+targets:
+  RKNChecker:
+    type: application
+    platform: iOS
+    sources:
+      - path: RKNChecker
+    info:
+      path: RKNChecker/App/Info.plist
+      properties:
+        CFBundleDisplayName: "RKN Checker"
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "1"
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: true
+    settings:
+      base:
+        PRODUCT_NAME: "RKNChecker"
+        PRODUCT_BUNDLE_IDENTIFIER: "com.example.rknchecker"
+        ASSETCATALOG_COMPILER_APPICON_NAME: "AppIcon"
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: "AccentColor"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        INFOPLIST_FILE: "RKNChecker/App/Info.plist"
+
+  RKNCheckerTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: Tests/RKNCheckerTests
+    dependencies:
+      - target: RKNChecker
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "com.example.rkncheckerTests"
+        TARGETED_DEVICE_FAMILY: "1,2"
