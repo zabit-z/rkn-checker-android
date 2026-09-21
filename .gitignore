@@ -16,13 +16,13 @@ build/
 *.ipr
 *.iws
 out/
-
+.agents
 # Local configuration files (contains local SDK path, etc.)
 local.properties
 graphify-out
 # Log files
 *.log
-
+.claude
 # OS generated files
 .DS_Store
 Thumbs.db
